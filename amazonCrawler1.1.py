@@ -10,9 +10,22 @@ from selenium.webdriver.support import expected_conditions as EC
 from operator import attrgetter
 #import pandas as pd
 
-# Credibility Function
-def credibilityfunc(helpful_votes, num_reviews)
-	pass
+# Credibility Function to check if a reviewer is a credible source in general
+# helpful_votes: is the profile's total upvotes he got on Amazon Reviews
+# num_reviews: The profile's total reviews given to Amazon products
+
+def profile_credibility(helpful_votes, num_reviews):
+	profile_score = 0
+	benchmark = 1
+	profile_score = helpful_votes / num_reviews
+	
+	if(profile_score >= benchmark):
+		# the guy is credible 
+		print("credible")
+	else:
+		# the guy isn't cred
+		print("not cred")
+
 
 # Main
 profArr = []
@@ -22,6 +35,8 @@ numReviews_arr = []
 
 # Open up firefox browser
 driver = webdriver.Firefox()
+#DRIVER_PATH = '/Users/vivekbharadwaj/Desktop/ComputerNetworking/Project2/networkingprojects/chromedriver.exe'
+#driver = webdriver.Chrome(executable_path=DRIVER_PATH)
 
 # Get item link from user input
 #webpageLink = input("Enter webpage:")
@@ -48,8 +63,8 @@ temp = int(totalReviews)
 pages = math.ceil(temp / 10)
 
 # dont run unless necessary for testing, lots of get reqests to the server. 
-"""
-for i in range(pages):
+
+for i in range(3):
 	for x in range(10):
 		profile = driver.find_elements_by_xpath("//div[contains(@id,'customer_review')]//div/a[@class='a-profile']")
 		review = driver.find_elements_by_xpath("//div[@id='cm_cr-review_list']//i[contains(@class,'review-rating')]/span")
@@ -69,12 +84,15 @@ for i in range(len(profArr)):
 	print(helpfulVotes)
 	print(numReviews, "\n")
 	print(ratingArr[i])
-"""
+	profile_credibility(helpfulVotes[i], numReviews[i])
+	# do something here
+
+
 driver.close()
 # End of main 
 
 """ 
-Things to be done:
+TODO:
 	Credibilty algo
 	Make more efficent if possible 
 	Implement dictionary/struct if needed for credibility algo 
