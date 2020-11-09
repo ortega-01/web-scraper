@@ -17,6 +17,8 @@ def credibilityfunc(helpful_votes, num_reviews)
 # Main
 profArr = []
 revArr = []
+helpfulVotes_arr = []
+numReviews_arr = []
 
 # Open up firefox browser
 driver = webdriver.Firefox()
@@ -61,7 +63,9 @@ for i in range(len(profArr)):
 	driver.get(profArr[i])
 	time.sleep(2)
 	helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
+	helpfulVotes_arr[i] = helpfulVotes
 	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
+	numReviews_arr[i] = numReviews
 	print(helpfulVotes)
 	print(numReviews, "\n")
 	print(ratingArr[i])
