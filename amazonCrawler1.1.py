@@ -10,6 +10,11 @@ from selenium.webdriver.support import expected_conditions as EC
 from operator import attrgetter
 #import pandas as pd
 
+# Credibility Function
+def credibilityfunc(helpful_votes, num_reviews)
+	pass
+
+# Main
 profArr = []
 revArr = []
 
@@ -28,8 +33,10 @@ allReviewsPage = driver.find_element_by_css_selector('a.a-link-emphasis.a-text-b
 
 # Get all reviews webpage
 driver.get(allReviewsPage)
-time.sleep(2)
+#time.sleep(2)
 totalReviews = driver.find_element_by_xpath("//div[@data-hook='cr-filter-info-review-rating-count']/span").get_attribute('innerHTML')
+
+# Get total pages
 mylist = totalReviews.split(" ")
 #for i in range(len(mylist)):
 #	print(mylist[i])
@@ -53,12 +60,19 @@ for i in range(pages):
 for i in range(len(profArr)):
 	driver.get(profArr[i])
 	time.sleep(2)
-	helpful_Votes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
+	helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
 	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
-	print(helpful_Votes)
+	print(helpfulVotes)
 	print(numReviews, "\n")
 	print(ratingArr[i])
 """
 driver.close()
+# End of main 
 
-
+""" 
+Things to be done:
+	Credibilty algo
+	Make more efficent if possible 
+	Implement dictionary/struct if needed for credibility algo 
+	Create a main if necessary 
+"""
