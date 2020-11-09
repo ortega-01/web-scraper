@@ -21,10 +21,12 @@ def profile_credibility(helpful_votes, num_reviews):
 	
 	if(profile_score >= benchmark):
 		# the guy is credible 
-		print("credible")
+		# print("credible")
+		return 1
 	else:
 		# the guy isn't cred
-		print("not cred")
+		# print("not cred")
+		return 0
 
 
 # Main
@@ -32,6 +34,7 @@ profArr = []
 revArr = []
 helpfulVotes_arr = []
 numReviews_arr = []
+newAvg_arr = []
 
 # Open up firefox browser
 driver = webdriver.Firefox()
@@ -84,10 +87,11 @@ for i in range(len(profArr)):
 	print(helpfulVotes)
 	print(numReviews, "\n")
 	print(ratingArr[i])
-	profile_credibility(helpfulVotes[i], numReviews[i])
-	# do something here
-
-
+	if (profile_credibility(helpfulVotes[i], numReviews[i])) == 1: 
+		newAvgScore.append(ratingArr[i])
+		
+# do math on newAvgScore_arr to get new score 
+	
 driver.close()
 # End of main 
 
