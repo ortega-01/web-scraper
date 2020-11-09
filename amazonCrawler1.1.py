@@ -29,14 +29,14 @@ allReviewsPage = driver.find_element_by_css_selector('a.a-link-emphasis.a-text-b
 # Get all reviews webpage
 driver.get(allReviewsPage)
 time.sleep(2)
-temp = driver.find_element_by_xpath("//div[@data-hook='cr-filter-info-review-rating-count']/span").get_attribute('innerHTML')
-mylist = temp.split(" ")
+totalReviews = driver.find_element_by_xpath("//div[@data-hook='cr-filter-info-review-rating-count']/span").get_attribute('innerHTML')
+mylist = totalReviews.split(" ")
 #for i in range(len(mylist)):
 #	print(mylist[i])
 #	print(i)
-temp = mylist[27]
-temp2 = int(totalPages) 
-pages = math.ceil(temp2 / 10)
+totalReviews = mylist[27]
+temp = int(totalReviews) 
+pages = math.ceil(temp / 10)
 
 # dont run unless necessary for testing, lots of get reqests to the server. 
 """
