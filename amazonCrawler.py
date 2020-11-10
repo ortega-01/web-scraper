@@ -97,7 +97,7 @@ for i in range(len(profArr)):
 	time.sleep(2)
 
 	helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
-	helpfulVotes_arr.append(helpfulVotes)
+	helpfulVotes_arr.append(helpfulVotes.replace(',', ''))
 
 	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
 	numReviews_arr.append(numReviews)
