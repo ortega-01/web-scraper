@@ -2,6 +2,7 @@ import unittest
 import sys
 import time
 import math
+import array
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
@@ -13,6 +14,9 @@ from operator import attrgetter
 # Credibility Function to check if a reviewer is a credible source in general
 # helpful_votes: is the profile's total upvotes he got on Amazon Reviews
 # num_reviews: The profile's total reviews given to Amazon products
+
+def average(ratings):
+	return sum(ratings) / len(ratings)
 
 def profile_credibility(helpful_votes, num_reviews):
 	profile_score = 0
@@ -31,10 +35,11 @@ def profile_credibility(helpful_votes, num_reviews):
 
 # Main
 profArr = []
-revArr = []
+tempRatingArr = []
 helpfulVotes_arr = []
 numReviews_arr = []
-newAvg_arr = []
+newAvgScore_arr = array.array("f", [0])
+ratingArr = []
 
 # Open up firefox browser
 driver = webdriver.Firefox()
@@ -67,31 +72,46 @@ pages = math.ceil(temp / 10)
 
 # dont run unless necessary for testing, lots of get reqests to the server. 
 
-for i in range(3):
+for i in range(1):
+
 	for x in range(10):
+
 		profile = driver.find_elements_by_xpath("//div[contains(@id,'customer_review')]//div/a[@class='a-profile']")
 		review = driver.find_elements_by_xpath("//div[@id='cm_cr-review_list']//i[contains(@class,'review-rating')]/span")
+
 		profArr.append(profile[x].get_attribute('href'))
-		ratingArr.append(review[x].get_attribute('innerHTML'))
+		tempRatingArr.append(review[x].get_attribute('innerHTML'))
+
 	nextPage = driver.find_element_by_xpath("//li[@class= 'a-last']//*[contains(@href, 'pageNumber')]").get_attribute('href')
 	driver.get(nextPage)
 	time.sleep(1)
 
+for i in range(len(tempRatingArr)):
+	
+	templist = tempRatingArr[i].split(" ")
+	ratingArr.append(templist[0])
+
 for i in range(len(profArr)):
+
 	driver.get(profArr[i])
 	time.sleep(2)
+
 	helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
-	helpfulVotes_arr[i] = helpfulVotes
+	helpfulVotes_arr.append(helpfulVotes)
+
 	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
-	numReviews_arr[i] = numReviews
-	print(helpfulVotes)
-	print(numReviews, "\n")
-	print(ratingArr[i])
-	if (profile_credibility(helpfulVotes[i], numReviews[i])) == 1: 
-		newAvgScore.append(ratingArr[i])
+	numReviews_arr.append(numReviews)
+
+	#print(helpfulVotes)
+	#print(numReviews, "\n")
+	#print(ratingArr[i])
+
+	if (profile_credibility(int(helpfulVotes_arr[i]), int(numReviews_arr[i]))) == 1: 
+		newAvgScore_arr.append(float(ratingArr[i]))
 		
-# do math on newAvgScore_arr to get new score 
-	
+print("New average score is: ")
+print(average(newAvgScore_arr))
+
 driver.close()
 # End of main 
 
@@ -102,3 +122,4 @@ TODO:
 	Implement dictionary/struct if needed for credibility algo 
 	Create a main if necessary 
 """
+
