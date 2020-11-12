@@ -42,7 +42,7 @@ time.sleep(3)
 temp = driver.find_element_by_xpath("//div[@data-hook='cr-filter-info-review-rating-count']/span").get_attribute('innerHTML')
 mylist = temp.split(" ")
 temp = mylist[27]
-temp2 = int(temp) 
+temp2 = int(temp.replace(",",""))
 pages = math.ceil(temp2 / 10)
 
 # Don't run unless necessary for testing, lots of get requests to the server. 
