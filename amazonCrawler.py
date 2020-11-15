@@ -12,6 +12,7 @@ from selenium.common.exceptions import TimeoutException
 from selenium.common.exceptions import NoSuchElementException
 from operator import attrgetter
 import pandas as pd
+import csv
 
 # Function to calculate average 
 def average(ratings):
@@ -24,10 +25,10 @@ def profile_credibility(helpful_votes, num_reviews):
 	profile_score = int(helpful_votes) / int(num_reviews)
 	
 	if(profile_score >= benchmark):
-		# the reviewer is credible 
+		# the guy is credible 
 		return 1
 	else:
-		# the reviewer isn't credible
+		# the guy isn't cred
 		return 0
 
 # Main
@@ -36,13 +37,13 @@ tempRatingArr = [] # temp array of ratings
 helpfulVotes_arr = [] # array of helpful votes of profile
 numReviews_arr = [] # array of number of reviews of profile
 newAvgScore_arr = array.array("f", [0]) # array of reviews to be counted
-ratingArr = [] # array of each rating 
+ratingArr = [] # array of each rating
+info_list = [] 
 currPage = 1
 
 # Open up firefox browser
-driver = webdriver.Firefox()
-#DRIVER_PATH = '/Users/vivekbharadwaj/Desktop/ComputerNetworking/Project2/networkingprojects/chromedriver.exe'
-#driver = webdriver.Chrome(executable_path=DRIVER_PATH)
+driver = webdriver.Chrome(executable_path="/Users/vivekbharadwaj/Desktop/ComputerNetworking/Project2/networkingprojects/chromedriver")
+
 
 # Get item link from user input
 webpageLink = input("Enter link to amazon product: ")
@@ -63,8 +64,10 @@ totalReviews = mylist[27]
 temp = int(totalReviews) 
 pages = math.ceil(temp / 10)
 
+# dont run unless necessary for testing, lots of get reqests to the server. 
+
 # Loop total number of pages 
-for i in range(pages):
+for i in range(5):
 
 	profileExists = True
 	tmp = 0
@@ -112,14 +115,28 @@ for i in range(len(profArr)):
 
 	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
 	numReviews_arr.append(numReviews.replace(',', ''))
-
+	
+	# Organizes data stored
+	info_item = {
+		"Rating": tempRatingArr[i],
+		"Helpful Votes": helpfulVotes,
+		"Total Reviews": numReviews
+	}
+	info_list.append(info_item)
+	
+	#print(ratingArr[i])
 	#print(helpfulVotes)
 	#print(numReviews, "\n")
-	#print(ratingArr[i])
 
 	if (profile_credibility(helpfulVotes_arr[i], numReviews_arr[i])) == 1: 
 		newAvgScore_arr.append(float(ratingArr[i]))
-		
+
+
+
+df = pd.DataFrame(info_list)
+#Saves data to a csv file
+df.to_csv('productreviewers_2.csv') 
+
 print("New average score is: ")
 print(average(newAvgScore_arr))
 
