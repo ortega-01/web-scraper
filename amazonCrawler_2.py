@@ -85,6 +85,6 @@ df = pd.DataFrame(info_list)
 df.to_csv('product_reviewers.csv')
 
 #To look at the csv file, either find it in your computer's file management application (Ex. File Explorer for Windows)
-# or in your terminal/command prompt type "reviewers.csv", making sure you are in the right directory
+# or in your terminal/command prompt type "product_reviewers.csv", making sure you are in the right directory
 
 driver.quit()
