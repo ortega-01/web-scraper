@@ -63,8 +63,6 @@ totalReviews = mylist[27]
 temp = int(totalReviews) 
 pages = math.ceil(temp / 10)
 
-# dont run unless necessary for testing, lots of get reqests to the server. 
-
 # Loop total number of pages 
 for i in range(pages):
 
