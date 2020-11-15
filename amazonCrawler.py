@@ -24,10 +24,10 @@ def profile_credibility(helpful_votes, num_reviews):
 	profile_score = int(helpful_votes) / int(num_reviews)
 	
 	if(profile_score >= benchmark):
-		# the guy is credible 
+		# the reviewer is credible 
 		return 1
 	else:
-		# the guy isn't cred
+		# the reviewer isn't credible
 		return 0
 
 # Main
