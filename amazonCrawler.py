@@ -138,7 +138,7 @@ for i in range(len(profArr)):
 
 df = pd.DataFrame(info_list)
 #Saves data to a csv file
-df.to_csv('productreviewers.csv') 
+df.to_csv('productreviewers_2.csv') 
 
 print("New average score is: ")
 print(average(newAvgScore_arr))
