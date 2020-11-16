@@ -16,7 +16,10 @@ import csv
 
 # Function to calculate average 
 def average(ratings):
-	return sum(ratings) / len(ratings)
+	try:
+		return sum(ratings) / len(ratings)
+	except ZeroDivisionError:
+		return 0
 
 # Credibility Function to check if a reviewer is a credible source in general
 def profile_credibility(helpful_votes, num_reviews):
@@ -25,10 +28,10 @@ def profile_credibility(helpful_votes, num_reviews):
 	profile_score = int(helpful_votes) / int(num_reviews)
 	
 	if(profile_score >= benchmark):
-		# the guy is credible 
+		# the reviewer is credible 
 		return 1
 	else:
-		# the guy isn't cred
+		# the reviewer isn't credible
 		return 0
 
 # Main
@@ -36,7 +39,7 @@ profArr = [] # array of profile links
 tempRatingArr = [] # temp array of ratings
 helpfulVotes_arr = [] # array of helpful votes of profile
 numReviews_arr = [] # array of number of reviews of profile
-newAvgScore_arr = array.array("f", [0]) # array of reviews to be counted
+newAvgScore_arr = array.array("f") # array of reviews to be counted
 ratingArr = [] # array of each rating
 info_list = [] 
 currPage = 1
@@ -77,7 +80,11 @@ for i in range(pages):
 
 		# Get profile links
 		profile = driver.find_elements_by_xpath("//div[contains(@id,'customer_review')]//div/a[@class='a-profile']")
-		profArr.append(profile[tmp].get_attribute('href'))
+		if len(profile) > 0:
+			profArr.append(profile[tmp].get_attribute('href'))
+		else:
+			profileExists = False
+			break
 
 		# Get and store all reviews in array 
 		review = driver.find_elements_by_xpath("//div[@id='cm_cr-review_list']//i[contains(@class,'review-rating')]/span")
@@ -108,25 +115,21 @@ for i in range(len(profArr)):
 	time.sleep(2) # sleep to give time to load page and find element 
 
 	try: 
-		helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[1]/a/div/div[1]/span").get_attribute('innerHTML')
+		helpfulVotes = driver.find_element_by_xpath("//div[contains(@id,'profile_')]//div[@class='dashboard-desktop-stats-section']/div[1]//div[@class='dashboard-desktop-stat-value']/span").get_attribute('innerHTML')
 		helpfulVotes_arr.append(helpfulVotes.replace(',', ''))
 	except NoSuchElementException:
 		helpfulVotes_arr.append(0)
 
-	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]/div/div/div[4]/div[2]/div[1]/div[2]/div/div[2]/a/div/div[1]/span").get_attribute('innerHTML')
+	numReviews = driver.find_element_by_xpath("//div[contains(@id,'profile_')]//div[@class='dashboard-desktop-stats-section']/div[2]//div[@class='dashboard-desktop-stat-value']/span").get_attribute('innerHTML')
 	numReviews_arr.append(numReviews.replace(',', ''))
 	
 	# Organizes data stored
 	info_item = {
 		"Rating": tempRatingArr[i],
-		"Helpful Votes": helpfulVotes,
-		"Total Reviews": numReviews
+		"Helpful Votes": helpfulVotes_arr[i],
+		"Total Reviews": numReviews_arr[i]
 	}
 	info_list.append(info_item)
-	
-	#print(ratingArr[i])
-	#print(helpfulVotes)
-	#print(numReviews, "\n")
 
 	if (profile_credibility(helpfulVotes_arr[i], numReviews_arr[i])) == 1: 
 		newAvgScore_arr.append(float(ratingArr[i]))
